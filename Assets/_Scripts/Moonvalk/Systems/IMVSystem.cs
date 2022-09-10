@@ -1,18 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class IMVSystem : MonoBehaviour
+namespace Moonvalk.Systems
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Contract for any MVSystem that will be run within the MVSystemManager.
+    /// </summary>
+    public interface IMVSystem
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        /// <summary>
+        /// Execution method for each System.
+        /// </summary>
+        /// <param name="deltaTime_">The duration in time between last and current frame.</param>
+        void Execute(float deltaTime_);
     }
 }

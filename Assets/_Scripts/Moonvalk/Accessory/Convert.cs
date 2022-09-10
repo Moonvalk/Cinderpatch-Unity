@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class Convert : MonoBehaviour
+namespace Moonvalk.Accessory
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Static class containing basic extended conversion functions.
+    /// </summary>
+    public static class Convert
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        /// <summary>
+        /// Converts a boolean value to an integer.
+        /// </summary>
+        /// <param name="flag_">The input boolean flag to convert.</param>
+        /// <returns>Returns 1 if true or 0 if false.</returns>
+        public static int ToInt(bool flag_)
+        {
+            return (flag_ ? 1 : 0);
+        }
     }
 }

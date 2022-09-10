@@ -1,18 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Moonvalk.Systems;
 
-public class SpringSystem : MonoBehaviour
+namespace Moonvalk.Animation
 {
-    // Start is called before the first frame update
-    void Start()
+    public class SpringSystem : MVQueueSystem<SpringSystem>
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
