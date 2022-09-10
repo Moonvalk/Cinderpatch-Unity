@@ -1,18 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SpringVec2 : MonoBehaviour
+namespace Moonvalk.Animation
 {
-    // Start is called before the first frame update
-    void Start()
+    public class SpringVec2 : BaseSpring<Vector2>
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

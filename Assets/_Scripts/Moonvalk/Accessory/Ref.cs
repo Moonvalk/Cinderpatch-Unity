@@ -1,18 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class Ref : MonoBehaviour
+namespace Moonvalk.Accessory
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    /// <summary>
+    /// Contract for a method that will return a reference to a field similar to that of a pointer.
+    /// </summary>
+    /// <typeparam name="T">The type of value or object that will be stored here.</typeparam>
+    /// <returns>Returns a value or object of type T.</returns>
+    public delegate ref T Ref<T>();
 }

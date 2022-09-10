@@ -1,18 +1,11 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using Moonvalk.Systems;
 
-public class ITween : MonoBehaviour
+namespace Moonvalk.Animation
 {
-    // Start is called before the first frame update
-    void Start()
+    /// <summary>
+    /// Contract that a Tween object must fulfill.
+    /// </summary>
+    public interface ITween : IQueueItem
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
