@@ -66,18 +66,25 @@ namespace Moonvalk.Utilities
         }
 
         /// <summary>
-        /// Constructor that allows the user to start the Timer immediately.
+        /// Constructor that allows the user to set completion tasks.
+        /// </summary>
+        /// <param name="onCompleteTasks_">Tasks to run on completion.</param>
+        public BaseTimer(params Action[] onCompleteTasks_)
+        {
+            this.initialize();
+            this.OnComplete(onCompleteTasks_);
+        }
+
+        /// <summary>
+        /// Constructor that allows the user to set a duration and completion tasks.
         /// </summary>
         /// <param name="duration_">The duration in seconds that this timer will run for.</param>
-        /// <param name="start_">Set to true if this Timer should start immediately.</param>
-        public BaseTimer(float duration_, bool start_)
+        /// <param name="onCompleteTasks_">Tasks to run on completion.</param>
+        public BaseTimer(float duration_, params Action[] onCompleteTasks_)
         {
             this.initialize();
             this.Duration(duration_);
-            if (start_)
-            {
-                this.Start();
-            }
+            this.OnComplete(onCompleteTasks_);
         }
         #endregion
 
@@ -133,15 +140,16 @@ namespace Moonvalk.Utilities
         public BaseTimer Start()
         {
             this._timeRemaining = this._duration;
-            if (this._timeRemaining <= 0f)
-            {
-                this._currentState = BaseTimerState.Complete;
-                return this;
-            }
             this._currentState = BaseTimerState.Start;
             this.handleTasks(_currentState);
             (Global.GetSystem<TimerSystem>() as TimerSystem).Add(this);
             return this;
+        }
+
+        public BaseTimer Start(float duration_)
+        {
+            this.Duration(duration_);
+            return this.Start();
         }
 
         /// <summary>

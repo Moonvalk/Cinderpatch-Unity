@@ -24,7 +24,6 @@ namespace Moonvalk.Animation
             // Apply easing and set properties.
             for (int i = 0; i < this._properties.Length; i++)
             {
-                Debug.Log("Running Vector3 Tween now...");
                 this._properties[i]().x = this._easingFunctions[i](this._percentage, this._startValues[i].x, this._targetValues[i].x);
                 this._properties[i]().y = this._easingFunctions[i](this._percentage, this._startValues[i].y, this._targetValues[i].y);
                 this._properties[i]().z = this._easingFunctions[i](this._percentage, this._startValues[i].z, this._targetValues[i].z);

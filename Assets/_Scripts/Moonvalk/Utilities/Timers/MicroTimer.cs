@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 
 namespace Moonvalk.Utilities
 {
@@ -9,7 +11,7 @@ namespace Moonvalk.Utilities
         #region Constructors
         /// <summary>
         /// Default constructor taking no additional properties.
-        /// </summary>
+        /// </summary>S
         public MicroTimer() : base()
         {
         }
@@ -23,11 +25,19 @@ namespace Moonvalk.Utilities
         }
 
         /// <summary>
-        /// Constructor that allows the user to start the Timer immediately.
+        /// Constructor that allows the user to set completion tasks.
+        /// </summary>
+        /// <param name="onCompleteTasks_">Tasks to run on completion.</param>
+        public MicroTimer(params Action[] onCompleteTasks_) : base(onCompleteTasks_)
+        {
+        }
+
+        /// <summary>
+        /// Constructor that allows the user to set a duration and completion tasks.
         /// </summary>
         /// <param name="duration_">The duration in seconds that this timer will run for.</param>
-        /// <param name="start_">Set to true if this Timer should start immediately.</param>
-        public MicroTimer(float duration_, bool start_) : base(duration_, start_)
+        /// <param name="onCompleteTasks_">Tasks to run on completion.</param>
+        public MicroTimer(float duration_, params Action[] onCompleteTasks_) : base(duration_, onCompleteTasks_)
         {
         }
         #endregion

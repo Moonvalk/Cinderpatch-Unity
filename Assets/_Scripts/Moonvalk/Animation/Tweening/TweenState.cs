@@ -2,7 +2,7 @@
 namespace Moonvalk.Animation
 {
     /// <summary>
-    /// Provides an index for each available MVTween state.
+    /// Provides an index for each available Tween state.
     /// </summary>
     public enum TweenState
     {
