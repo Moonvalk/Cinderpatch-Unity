@@ -12,11 +12,11 @@ public class TestTweenBehavior : MonoBehaviour
 
         // Tween start.
         TweenVec3 inTween = new TweenVec3(() => ref this._position);
-            inTween.To(new Vector3(0f, 5f, 5f)).Duration(2f).Ease(Easing.Elastic.Out).OnComplete(() => {
+            inTween.To(new Vector3(3f, 2f, -5f)).Duration(2f).Ease(Easing.Elastic.Out).OnComplete(() => {
                 
                 // Tween back.
                 TweenVec3 outTween = new TweenVec3(() => ref this._position);
-                    outTween.To(new Vector3(-5f, 6f, 2f)).Duration(2f).Ease(Easing.Elastic.Out).OnComplete(() => {
+                    outTween.To(new Vector3(-3f, 4f, -2f)).Duration(2f).Ease(Easing.Elastic.Out).OnComplete(() => {
                         inTween.Start();
                     }).Start();
 

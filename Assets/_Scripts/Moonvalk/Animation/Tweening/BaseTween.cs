@@ -52,7 +52,7 @@ namespace Moonvalk.Animation
         protected TweenState _currentState = TweenState.Idle;
 
         /// <summary>
-        /// A map of Actions that will occur while this Tween is in an active MVTweenState.
+        /// A map of Actions that will occur while this Tween is in an active TweenState.
         /// </summary>
         protected Dictionary<TweenState, InitValue<List<Action>>> _functions;
         #endregion
@@ -80,9 +80,6 @@ namespace Moonvalk.Animation
             {
                 this._easingFunctions[i] = Easing.Linear.None;
             }
-
-            // Create a new MVTimer.
-            this._delayTimer = new MicroTimer();
         }
         #endregion
 
@@ -90,7 +87,7 @@ namespace Moonvalk.Animation
         /// <summary>
         /// Gets the reference corresponding to the property value(s).
         /// </summary>
-        /// <value>The function that returns reference to the property being Tweened.</value>
+        /// <value>The function that returns reference to the properties being Tweened.</value>
         public Ref<T>[] Properties
         {
             get
@@ -110,6 +107,17 @@ namespace Moonvalk.Animation
                 return this._percentage;
             }
         }
+
+        /// <summary>
+        /// Gets the current state of this Tween.
+        /// </summary>
+        public TweenState State
+        {
+            get
+            {
+                return this._currentState;
+            }
+        }
         #endregion
 
         #region Public Methods
@@ -120,7 +128,9 @@ namespace Moonvalk.Animation
         {
             this.updateStartValues();
             this._percentage = 0f;
-            this._delayTimer.Start();
+            if (_delayTimer != null) {
+                this._delayTimer.Start();
+            }
             this._currentState = TweenState.Start;
             this.handleTasks(this._currentState);
             (Global.GetSystem<TweenSystem>() as TweenSystem).Add(this);
@@ -170,6 +180,9 @@ namespace Moonvalk.Animation
         /// <returns>Returns this Tween object.</returns>
         public BaseTween<T> Delay(float delaySeconds_)
         {
+            if (this._delayTimer == null) {
+                this._delayTimer = new MicroTimer();
+            }
             this._delayTimer.Duration(delaySeconds_);
             return this;
         }
@@ -294,7 +307,7 @@ namespace Moonvalk.Animation
             bool isComplete = false;
 
             // Complete delay before animating.
-            if (!this._delayTimer.IsComplete)
+            if (this._delayTimer != null && !this._delayTimer.IsComplete)
             {
                 return isComplete;
             }
