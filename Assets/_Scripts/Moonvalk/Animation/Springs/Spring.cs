@@ -34,7 +34,7 @@ namespace Moonvalk.Animation
         {
             for (int i = 0; i < this._properties.Length; i++)
             {
-                this._speed[i] += this._currentForce[i];
+                this._speed[i] += this._currentForce[i] * deltaTime_;
                 this._properties[i]() += this._speed[i] * deltaTime_;
             }
         }

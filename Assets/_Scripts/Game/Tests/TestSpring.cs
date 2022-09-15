@@ -18,7 +18,7 @@ public class TestSpring : MonoBehaviour
         SpringVec3 newSpring = new SpringVec3(() => ref this._position, () => ref this._scale, () => ref this._rotation);
         this.Properties.AddSpring(newSpring);
 
-        MicroTimer timer = new MicroTimer(1f);
+        MicroTimer timer = new MicroTimer(0.1f);
         timer.OnComplete(() => {
             
             newSpring.To(new Vector3(-2, 5f, -6f), new Vector3(2f, 2f, 2f), new Vector3(0f, 20f, 360f)).OnComplete(() => {
