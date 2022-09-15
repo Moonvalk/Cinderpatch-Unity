@@ -20,12 +20,12 @@ namespace Moonvalk.Animation
         /// <summary>
         /// The tension value applied to this spring.
         /// </summary>
-        protected float _tension = 0.5f;
+        protected float _tension = 25f;
 
         /// <summary>
         /// The dampening value applied to this spring.
         /// </summary>
-        protected float _dampening = 0.05f;
+        protected float _dampening = 5f;
 
         /// <summary>
         /// The current speed applied to this spring.
@@ -40,7 +40,7 @@ namespace Moonvalk.Animation
         /// <summary>
         /// The minimum force applied to a Spring before it is no longer updated until settings change.
         /// </summary>
-        protected float _minimumForce = 0.005f;
+        protected float _minimumForce = 0.05f;
 
         /// <summary>
         /// The current SpringState of this Spring object.

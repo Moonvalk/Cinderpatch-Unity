@@ -1,9 +1,14 @@
 fileFormatVersion: 2
-guid: 4ea3f41f6fb1f7f449abe8c8d91c920b
+guid: 8140f3897fb88fd4cbd6835773eb6b0f
 ModelImporter:
   serializedVersion: 21300
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mat_haystack
+    second: {fileID: 2100000, guid: f5ae2d5e717ed7b419f6ecefc8ad62f1, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
