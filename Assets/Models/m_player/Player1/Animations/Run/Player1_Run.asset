@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721c874d62de6de41b551d2109791d0d, type: 3}
+  m_Name: Player1_Run
+  m_EditorClassIdentifier: 
+  Name: Run
+  DefaultDuration: 1
+  Speed: 5
+  Frames:
+  - Image: {fileID: 2800000, guid: f63fcf9384ed68644a12fd011d7eef74, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: e22cdd7276c837b468f7a03d5446bcea, type: 3}
+    Duration: 0.5
+  - Image: {fileID: 2800000, guid: bb01c69ce2a56d24aa0d5ca832d5bafc, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: 285d058c48e948f419db1b2a0dec10a8, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: 1b6f18c3f22d0bb458b241f658b5cc21, type: 3}
+    Duration: 0.5
+  - Image: {fileID: 2800000, guid: e65ed6b24b8be2b449b11b4d40c1c8fd, type: 3}
+    Duration: 1

@@ -40,7 +40,7 @@ namespace Moonvalk.Animation
         /// <summary>
         /// The minimum force applied to a Spring before it is no longer updated until settings change.
         /// </summary>
-        protected float _minimumForce = 0.05f;
+        protected float _minimumForce = 0.002f;
 
         /// <summary>
         /// The current SpringState of this Spring object.
@@ -137,7 +137,6 @@ namespace Moonvalk.Animation
             {
                 this.snapSpringToTarget();
                 this._currentState = SpringState.Complete;
-                this.handleTasks(this._currentState);
                 return false;
             }
             return true;
@@ -272,6 +271,11 @@ namespace Moonvalk.Animation
             {
                 _functions[state_].Value.Add(task);
             }
+        }
+
+        public void HandleTasks()
+        {
+            this.handleTasks(this._currentState);
         }
 
         /// <summary>

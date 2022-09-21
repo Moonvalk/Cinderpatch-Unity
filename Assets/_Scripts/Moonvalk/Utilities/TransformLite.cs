@@ -13,9 +13,9 @@ namespace Moonvalk.Utilities
         public Vector3 Position;
 
         /// <summary>
-        /// The rotation of this Transform.
+        /// The euler rotation of this Transform.
         /// </summary>
-        public Quaternion Rotation;
+        public Vector3 Rotation;
 
         /// <summary>
         /// The scale of this Transform.
@@ -28,7 +28,7 @@ namespace Moonvalk.Utilities
         public TransformLite()
         {
             this.Position = new Vector3();
-            this.Rotation = new Quaternion();
+            this.Rotation = new Vector3();
             this.Scale = new Vector3(1f, 1f, 1f);
         }
 
@@ -48,7 +48,7 @@ namespace Moonvalk.Utilities
         public void Copy(Transform transformToCopy_)
         {
             this.Position = transformToCopy_.position;
-            this.Rotation = transformToCopy_.rotation;
+            this.Rotation = transformToCopy_.rotation.eulerAngles;
             this.Scale = transformToCopy_.localScale;
         }
     }

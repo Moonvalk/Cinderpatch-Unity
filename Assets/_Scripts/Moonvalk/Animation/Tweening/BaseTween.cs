@@ -167,7 +167,6 @@ namespace Moonvalk.Animation
             if (targetReached)
             {
                 this._currentState = TweenState.Complete;
-                this.handleTasks(this._currentState);
                 return false;
             }
             return true;
@@ -349,6 +348,11 @@ namespace Moonvalk.Animation
             {
                 this._startValues[i] = this._properties[i]();
             }
+        }
+
+        public void HandleTasks()
+        {
+            this.handleTasks(this._currentState);
         }
 
         /// <summary>

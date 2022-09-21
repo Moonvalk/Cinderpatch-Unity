@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Moonvalk.Accessory;
 using Moonvalk.Systems;
+using UnityEngine;
 
 namespace Moonvalk.Utilities
 {
@@ -22,6 +23,11 @@ namespace Moonvalk.Utilities
         protected float _timeRemaining;
 
         /// <summary>
+        /// A multiplier to be applied to delta time.
+        /// </summary>
+        protected float _timeScale = 1f;
+
+        /// <summary>
         /// The current timer state.
         /// </summary>
         protected BaseTimerState _currentState = BaseTimerState.Idle;
@@ -34,7 +40,7 @@ namespace Moonvalk.Utilities
 
         #region Public Getters/Setters
         /// <summary>
-        /// Returns true when this MVTimer is complete.
+        /// Returns true when this Timer is complete.
         /// </summary>
         /// <value>Returns a boolean value representing whether this Timer has completed.</value>
         public bool IsComplete
@@ -42,6 +48,18 @@ namespace Moonvalk.Utilities
             get
             {
                 return this._currentState == BaseTimerState.Complete;
+            }
+        }
+
+        /// <summary>
+        /// Returns true when this Timer is actively running.
+        /// </summary>
+        /// <value>Returns a boolean value representing whether this Timer is running.</value>
+        public bool IsRunning
+        {
+            get
+            {
+                return (this._currentState == BaseTimerState.Start || this._currentState == BaseTimerState.Update);
             }
         }
         #endregion
@@ -161,11 +179,28 @@ namespace Moonvalk.Utilities
         }
 
         /// <summary>
+        /// Pauses this Timer.
+        /// </summary>
+        public void Paused()
+        {
+            this._currentState = BaseTimerState.Idle;
+        }
+
+        /// <summary>
         /// Resumes this Timer from wherever last left off.
         /// </summary>
         public void Resume()
         {
             this._currentState = BaseTimerState.Update;
+        }
+
+        public void SetTimeScale(float timeScale_)
+        {
+            if (timeScale_ < 0f)
+            {
+                return;
+            }
+            this._timeScale = timeScale_;
         }
 
         /// <summary>
@@ -175,11 +210,11 @@ namespace Moonvalk.Utilities
         /// <returns>Returns true when actively running and false once complete.</returns>
         public bool Update(float deltaTime_)
         {
-            if (this._currentState == BaseTimerState.Complete)
+            if (this._currentState == BaseTimerState.Complete || this._currentState == BaseTimerState.Stopped)
             {
                 return false;
             }
-            if (this._currentState == BaseTimerState.Stopped || this._currentState == BaseTimerState.Idle)
+            if (this._currentState == BaseTimerState.Idle)
             {
                 return true;
             }
@@ -190,10 +225,17 @@ namespace Moonvalk.Utilities
             if (complete)
             {
                 this._currentState = BaseTimerState.Complete;
-                this.handleTasks(this._currentState);
                 return false;
             }
             return true;
+        }
+
+        /// <summary>
+        /// Handles tasks for the current state.
+        /// </summary>
+        public void HandleTasks()
+        {
+            this.handleTasks(this._currentState);
         }
         #endregion
 
@@ -224,6 +266,21 @@ namespace Moonvalk.Utilities
         }
 
         /// <summary>
+        /// Runs this MVTimer object.
+        /// </summary>
+        /// <param name="deltaTime_">Duration of time between last and current game tick.</param>
+        /// <returns>Returns true when complete or false when actively running.</returns>
+        protected bool runTimer(float deltaTime_)
+        {
+            this._timeRemaining -= (deltaTime_ * this._timeScale);
+            if (this._timeRemaining <= 0f)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        /// <summary>
         /// Handles all tasks for the specified state.
         /// </summary>
         /// <param name="state_">The state to run tasks for.</param>
@@ -233,21 +290,6 @@ namespace Moonvalk.Utilities
             {
                 action();
             }
-        }
-
-        /// <summary>
-        /// Runs this MVTimer object.
-        /// </summary>
-        /// <param name="deltaTime_">Duration of time between last and current game tick.</param>
-        /// <returns>Returns true when complete or false when actively running.</returns>
-        protected bool runTimer(float deltaTime_)
-        {
-            this._timeRemaining -= deltaTime_;
-            if (this._timeRemaining <= 0f)
-            {
-                return true;
-            }
-            return false;
         }
         #endregion
     }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Moonvalk.Systems
 {
@@ -36,12 +37,14 @@ namespace Moonvalk.Systems
             {
                 return;
             }
-            for (int i = 0; i < _queue.Count; i++)
+            for (int i = 0; i < this._queue.Count; i++)
             {
-                bool active = _queue[i].Update(deltaTime_);
+                IQueueItem item = this._queue[i];
+                bool active = item.Update(deltaTime_);
                 if (!active)
                 {
-                    this.Remove(_queue[i]);
+                    this.Remove(item);
+                    item.HandleTasks();
                 }
             }
         }
@@ -69,6 +72,10 @@ namespace Moonvalk.Systems
         /// <param name="itemToAdd_">The item to add.</param>
         public void Add(IQueueItem itemToAdd_)
         {
+            if (this._queue.Contains(itemToAdd_))
+            {
+                return;
+            }
             this._queue.Add(itemToAdd_);
         }
 

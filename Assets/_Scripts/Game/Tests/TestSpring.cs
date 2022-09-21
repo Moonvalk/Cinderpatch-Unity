@@ -21,7 +21,7 @@ public class TestSpring : MonoBehaviour
         MicroTimer timer = new MicroTimer(0.1f);
         timer.OnComplete(() => {
             
-            newSpring.To(new Vector3(-2, 5f, -6f), new Vector3(2f, 2f, 2f), new Vector3(0f, 20f, 360f)).OnComplete(() => {
+            newSpring.To(new Vector3(0f, 3f, -6f), new Vector3(2f, 2f, 2f), new Vector3(0f, 20f, 360f)).OnComplete(() => {
                 newSpring.To(new Vector3(2f, 3f, 0f), new Vector3(1f, 1f, 1f), new Vector3(60f, 0f, 0f)).OnComplete(() => {
                     timer.Start();
                 });
