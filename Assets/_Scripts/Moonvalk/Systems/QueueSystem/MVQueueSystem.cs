@@ -66,6 +66,11 @@ namespace Moonvalk.Systems
             this._queue.Clear();
         }
 
+        public override void Clear()
+        {
+            this.RemoveAll();
+        }
+
         /// <summary>
         /// Adds an updatable item to the queue.
         /// </summary>

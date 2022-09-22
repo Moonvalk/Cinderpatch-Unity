@@ -12,11 +12,6 @@ namespace Game
     {
         #region Data Fields
         /// <summary>
-        /// Reference to the main player.
-        /// </summary>
-        public PlayerController Player;
-
-        /// <summary>
         /// Singleton instance of GameManager.
         /// </summary>
         protected static GameManager _instance;

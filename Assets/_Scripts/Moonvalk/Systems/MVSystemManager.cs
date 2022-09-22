@@ -52,6 +52,14 @@ namespace Moonvalk.Systems
             }
             return null;
         }
+
+        public void ClearAllSystems()
+        {
+            foreach (IMVSystem system in _systemMap)
+            {
+                system.Clear();
+            }
+        }
         #endregion
     }
 }

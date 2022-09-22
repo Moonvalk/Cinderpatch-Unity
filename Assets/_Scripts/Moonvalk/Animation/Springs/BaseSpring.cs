@@ -182,6 +182,13 @@ namespace Moonvalk.Animation
             return this;
         }
 
+        public ISpring Snap(params T[] targetProperties_)
+        {
+            this._targetProperties = targetProperties_;
+            this.snapSpringToTarget();
+            return this;
+        }
+
         /// <summary>
         /// Removes this Spring on the following game tick.
         /// </summary>

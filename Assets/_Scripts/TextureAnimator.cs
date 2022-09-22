@@ -9,24 +9,50 @@ public class TextureAnimator : MonoBehaviour
     [SerializeField]
     protected MeshRenderer _renderer;
 
-    public TextureAnimation[] Animations;
-    public string DefaultAnimation = "";
+    public TextureAnimationSet[] AnimationSets;
+    public string DefaultSet = "Default";
+    public string DefaultAnimation = "Default";
     public bool RandomizeFirstFrame = false;
-    protected Dictionary<string, TextureAnimation> _animationMap;
+
+    protected Dictionary<string, Dictionary<string, TextureAnimation>> _animations;
     protected string _currentAnimation = "";
+    protected string _currentSet = "";
     protected InitValue<MicroTimer> _animationTimer;
     protected int _currentFrame = 0;
 
+    public Dictionary<string, TextureAnimation> Animations
+    {
+        get
+        {
+            return this._animations[this._currentSet];
+        }
+    }
+
     private void Awake()
     {
-        // Establish a clone of the material selected for instance.s
+        if (this.DefaultSet != "")
+        {
+            this._currentSet = this.DefaultSet;
+        }
+
+        // Establish a clone of the material selected for instances.
         this._renderer = GetComponent<MeshRenderer>();
         this._renderer.material = new Material(this._renderer.material);
 
-        this._animationMap = new Dictionary<string, TextureAnimation>();
-        foreach(TextureAnimation animation in Animations)
+        // Build a map for finding animation sets and their corresponding animations.
+        this._animations = new Dictionary<string, Dictionary<string, TextureAnimation>>();
+        foreach (TextureAnimationSet set in this.AnimationSets)
         {
-            this._animationMap.Add(animation.Name, animation);
+            if (this._currentSet == "")
+            {
+                this._currentSet = set.Name;
+            }
+            Dictionary<string, TextureAnimation> newSet = new Dictionary<string, TextureAnimation>();
+            foreach (TextureAnimation animation in set.Animations)
+            {
+                newSet.Add(animation.Name, animation);
+            }
+            this._animations.Add(set.Name, newSet);
         }
 
         this._animationTimer = new InitValue<MicroTimer>(this.initAnimationTimer);
@@ -37,7 +63,7 @@ public class TextureAnimator : MonoBehaviour
         if (DefaultAnimation != "") {
             this.Play(DefaultAnimation);
             if (RandomizeFirstFrame) {
-                this._currentFrame = Random.Range(0, this._animationMap[_currentAnimation].Frames.Count - 1);
+                this._currentFrame = Random.Range(0, this.Animations[_currentAnimation].Frames.Count - 1);
             }
         }
     }
@@ -70,14 +96,14 @@ public class TextureAnimator : MonoBehaviour
         this._currentAnimation = animationName_;
         if (restart_)
         {
-            this._currentFrame = this._animationMap[this._currentAnimation].Frames.Count - 1;
+            this._currentFrame = this.Animations[this._currentAnimation].Frames.Count - 1;
         }
         this.playNextFrame();
     }
 
     protected void playNextFrame()
     {
-        TextureAnimation current = this._animationMap[this._currentAnimation];
+        TextureAnimation current = this.Animations[this._currentAnimation];
         TextureFrame frame = this.NextFrame();
         float frameDuration = this.CurrentFrameDuration();
         this._renderer.material.mainTexture = frame.Image;
@@ -87,25 +113,58 @@ public class TextureAnimator : MonoBehaviour
     public TextureFrame NextFrame()
     {
         this._currentFrame++;
-        if (this._currentFrame >= this._animationMap[this._currentAnimation].Frames.Count)
+        if (this._currentFrame >= this.Animations[this._currentAnimation].Frames.Count)
         {
             this._currentFrame = 0;
         }
-        return this._animationMap[this._currentAnimation].Frames[this._currentFrame];
+        return this.Animations[this._currentAnimation].Frames[this._currentFrame];
     }
 
     public float CurrentFrameDuration()
     {
-        float frameDuration = this._animationMap[this._currentAnimation].Frames[this._currentFrame].Duration;
+        float frameDuration = this.Animations[this._currentAnimation].Frames[this._currentFrame].Duration;
         if (frameDuration == 0f)
         {
-            frameDuration = this._animationMap[this._currentAnimation].DefaultDuration;
+            frameDuration = this.Animations[this._currentAnimation].DefaultDuration;
         }
-        return (frameDuration / this._animationMap[this._currentAnimation].Speed);
+        return (frameDuration / this.Animations[this._currentAnimation].Speed);
     }
 
     public void SetTimeScale(float newTimeScale_)
     {
+        this._animationTimer.Value.SetTimeScale(newTimeScale_);
+    }
 
+    public void ChangeSet(string newSetName_)
+    {
+        if (this._currentSet == newSetName_)
+        {
+            return;
+        }
+        if (this._animations.ContainsKey(newSetName_))
+        {
+            this._currentSet = newSetName_;
+        }   
+    }
+
+    public float GetAnimationDuration(string animation_)
+    {
+        if (!this.Animations.ContainsKey(animation_))
+        {
+            return 0f;
+        }
+        float duration = 0f;
+        TextureAnimation request = this.Animations[animation_];
+        foreach (TextureFrame frame in request.Frames)
+        {
+            float frameDuration = frame.Duration;
+            if (frameDuration == 0f)
+            {
+                frameDuration = request.DefaultDuration;
+            }
+            duration += (frameDuration / request.Speed);
+        }
+
+        return duration;
     }
 }

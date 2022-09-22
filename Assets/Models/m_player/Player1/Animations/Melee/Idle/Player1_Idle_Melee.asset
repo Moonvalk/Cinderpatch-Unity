@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721c874d62de6de41b551d2109791d0d, type: 3}
+  m_Name: Player1_Idle_Melee
+  m_EditorClassIdentifier: 
+  Name: Idle
+  DefaultDuration: 0.5
+  Speed: 2
+  Frames:
+  - Image: {fileID: 2800000, guid: b52518d5ff4f6b544ae96f54974b9f04, type: 3}
+    Duration: 0.5
+  - Image: {fileID: 2800000, guid: f832dfbb7b524fc488e05e6d3f0ac1c4, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: 7b2ebe53e5f0bdd4881f6201b716a99a, type: 3}
+    Duration: 0.5
+  - Image: {fileID: 2800000, guid: c71cea68084eab24fb50298a2b763de2, type: 3}
+    Duration: 1

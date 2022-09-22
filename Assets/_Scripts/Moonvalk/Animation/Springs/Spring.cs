@@ -21,6 +21,11 @@ namespace Moonvalk.Animation
         {
             for (int i = 0; i < this._properties.Length; i++)
             {
+                if (this._properties[i] == null)
+                {
+                    this.Stop();
+                    break;
+                }
                 float displacement = (this._targetProperties[i] - this._properties[i]());
                 this._currentForce[i] = MotionAlgorithms.SimpleHarmonicMotion(this._tension, displacement, this._dampening, this._speed[i]);
             }
@@ -34,6 +39,11 @@ namespace Moonvalk.Animation
         {
             for (int i = 0; i < this._properties.Length; i++)
             {
+                if (this._properties[i] == null)
+                {
+                    this.Stop();
+                    break;
+                }
                 this._speed[i] += this._currentForce[i] * deltaTime_;
                 this._properties[i]() += this._speed[i] * deltaTime_;
             }
@@ -47,6 +57,11 @@ namespace Moonvalk.Animation
         {
             for (int index = 0; index < _currentForce.Length; index++)
             {
+                if (this._properties[index] == null)
+                {
+                    this.Stop();
+                    return true;
+                }
                 if (Mathf.Abs(this._currentForce[index]) >= this._minimumForce || Mathf.Abs(this._speed[index]) >= this._minimumForce)
                 {
                     return true;

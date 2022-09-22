@@ -25,7 +25,7 @@ public class Interaction : MonoBehaviour
 
     public void Start()
     {
-        this._player = Global.GetGameManager().Player;
+        this._player = PlayerController.Player1;
 
         this._promptTransform = new TransformLite();
         this._promptTransform.Scale = new Vector3(0f, 0f, 0f);

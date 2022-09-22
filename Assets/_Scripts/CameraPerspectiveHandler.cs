@@ -47,7 +47,7 @@ public class CameraPerspectiveHandler : MonoBehaviour
     public void AnimateTo(Vector3 position_, Vector3 rotation_) {
         // Reset the camera.
         TweenVec3 resetTween = new TweenVec3(() => ref this._currentTransform.Position, () => ref this._currentTransform.Rotation);
-        resetTween.To(position_, rotation_).Duration(1f).Ease(Easing.Cubic.InOut);
+        resetTween.To(position_, rotation_).Duration(1.5f).Ease(Easing.Cubic.InOut);
         resetTween.Start();
     }
 

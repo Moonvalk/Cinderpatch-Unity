@@ -11,5 +11,7 @@ namespace Moonvalk.Systems
         /// </summary>
         /// <param name="deltaTime_">The duration in time between last and current frame.</param>
         void Execute(float deltaTime_);
+
+        void Clear();
     }
 }

@@ -26,6 +26,7 @@ public class CoffinAnimator : MonoBehaviour
         this._height = transform.position.y;
         this._rotation = 122f;
         this.Player.EnableControl(false);
+        this.Player.EnablePhysics(false);
         this.Player.Hide(true);
         this.Player.transform.position = transform.position;
 

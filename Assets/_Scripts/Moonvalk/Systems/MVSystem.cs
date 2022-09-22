@@ -38,6 +38,8 @@ namespace Moonvalk.Systems
         /// </summary>
         /// <param name="delta_">The duration in time between last and current frame.</param>
         public abstract void Execute(float delta_);
+
+        public abstract void Clear();
         #endregion
     }
 }

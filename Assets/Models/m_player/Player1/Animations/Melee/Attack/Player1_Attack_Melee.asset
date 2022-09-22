@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 721c874d62de6de41b551d2109791d0d, type: 3}
+  m_Name: Player1_Attack_Melee
+  m_EditorClassIdentifier: 
+  Name: Attack
+  DefaultDuration: 1
+  Speed: 6
+  Frames:
+  - Image: {fileID: 2800000, guid: 6766d538d61268f4e89ff97cbb774d26, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: 6067533deeaf81b44929d73750956763, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: 3145cf0e4aebfa0498cfe5b52066bb8e, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: 32e324292a45dad4baea26583a7b60b9, type: 3}
+    Duration: 1
+  - Image: {fileID: 2800000, guid: db482a3549c080c4ba5329ea387fac7b, type: 3}
+    Duration: 1
