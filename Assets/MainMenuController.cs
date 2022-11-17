@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 using Moonvalk.Animation;
 using Moonvalk.Utilities;
 using Moonvalk;
@@ -19,6 +20,8 @@ public enum MainMenuButton
 
 public class MainMenuController : MonoBehaviour
 {
+    public string NewsURL;
+
     public Image MenuBackground;
     public float MenuBackgroundOpacity = 0.75f;
     public float MenuDelay = 8f;
@@ -33,7 +36,7 @@ public class MainMenuController : MonoBehaviour
     public Image GameLogo2;
     public float LogoSizeIdle = 0.7f;
     public float LogoSizePushed = 0.6f;
-    public Vector2 LogoPushedPosition;
+    public RectTransform LogoPushedPosition;
     public float LogoPushDelay = 3f;
 
     protected Spring _gameLogoSpring;
@@ -66,6 +69,19 @@ public class MainMenuController : MonoBehaviour
     protected float _hoverScale;
 
     public UnityEvent EnterPlayEvent;
+    public UnityEvent SettingsEvent;
+
+    protected AudioSource _menuMusic;
+    protected float _musicVolume;
+    protected Tween _musicTween;
+
+    private void Awake()
+    {
+        this._menuMusic = GetComponent<AudioSource>();
+        this._menuMusic.volume = 0f;
+        this._menuMusic.loop = true;
+        this._musicVolume = 0f;
+    }
 
     private void Start()
     {
@@ -115,6 +131,12 @@ public class MainMenuController : MonoBehaviour
                 this.ButtonText[this._activeButtonHovered].transform.localScale = newScale;
             }
             this.Hover.transform.localScale = newScale;
+        });
+
+        // Music
+        this._musicTween = new Tween(() => ref this._musicVolume);
+        this._musicTween.Duration(4f).OnUpdate(() => {
+            this._menuMusic.volume = this._musicVolume;
         });
     }
 
@@ -186,6 +208,9 @@ public class MainMenuController : MonoBehaviour
             this.animateLogoIn();
         });
         fadeBackground.To(this.MenuBackgroundOpacity).Start();
+        this._menuMusic.loop = true;
+        this._menuMusic.Play();
+        this._musicTween.To(1f).Start();
     }
 
     protected void animateLogoIn()
@@ -201,10 +226,10 @@ public class MainMenuController : MonoBehaviour
     protected void pushLogo()
     {
         this._gameLogoSpring.To(this.LogoSizePushed);
-        this._gameLogoPushTween.To(this.LogoPushedPosition).Start();
+        this._gameLogoPushTween.To(this.LogoPushedPosition.position).Start();
 
         Tween menuPanelTween = new Tween(() => ref this._menuPanelPositionX);
-        menuPanelTween.Duration(1f).Ease(Easing.Quadratic.Out).OnUpdate(() => {
+        menuPanelTween.Duration(1f).Ease(Easing.Cubic.Out).OnUpdate(() => {
             this.MenuPanel.position = new Vector3(this._originalMenuPosition.x - this._menuPanelPositionX, this._originalMenuPosition.y, this._originalMenuPosition.z);
         });
         menuPanelTween.To(0f).Start();
@@ -248,10 +273,10 @@ public class MainMenuController : MonoBehaviour
                 this.enterPlay();
                 break;
             case MainMenuButton.Settings:
-
+                this.enterSettings();
                 break;
             case MainMenuButton.News:
-
+                Application.OpenURL(this.NewsURL);
                 break;
             case MainMenuButton.Exit:
                 Application.Quit();
@@ -261,7 +286,9 @@ public class MainMenuController : MonoBehaviour
 
     protected void enterPlay()
     {
+        this._musicTween.To(0f).Start();
         this.hideMenu();
+        this.hideBackground();
         this.EnterPlayEvent.Invoke();
         MicroTimer timer = new MicroTimer(() => {
             Global.Systems.ClearAllSystems();
@@ -270,7 +297,37 @@ public class MainMenuController : MonoBehaviour
         timer.Start(6f);
     }
 
+    protected void enterSettings()
+    {
+        this.hideMenu();
+        this.SettingsEvent.Invoke();
+    }
+
     protected void hideMenu()
+    {
+        Tween menuPanelTween = new Tween(() => ref this._menuPanelPositionX);
+        menuPanelTween.Duration(1f).Ease(Easing.Cubic.Out).OnUpdate(() => {
+            this.MenuPanel.position = new Vector3(this._originalMenuPosition.x - this._menuPanelPositionX, this._originalMenuPosition.y, this._originalMenuPosition.z);
+        });
+        menuPanelTween.To(this.MenuPanelStartOffset).Start();
+
+        this._gameLogoTween.To(0f).Start();
+        this._gameLogoSpring.To(0f);
+    }
+
+    public void ShowMenu()
+    {
+        Tween menuPanelTween = new Tween(() => ref this._menuPanelPositionX);
+        menuPanelTween.Duration(1f).Ease(Easing.Cubic.Out).OnUpdate(() => {
+            this.MenuPanel.position = new Vector3(this._originalMenuPosition.x - this._menuPanelPositionX, this._originalMenuPosition.y, this._originalMenuPosition.z);
+        });
+        menuPanelTween.To(0f).Start();
+
+        this._gameLogoTween.To(1f).Start();
+        this._gameLogoSpring.To(this.LogoSizePushed);
+    }
+
+    protected void hideBackground()
     {
         // Fade background.
         Tween fadeBackground = new Tween(() => ref this._backgroundOpacity);
@@ -278,15 +335,6 @@ public class MainMenuController : MonoBehaviour
             this.updateBackgroundOpacity();
         });
         fadeBackground.To(0f).Start();
-
-        Tween menuPanelTween = new Tween(() => ref this._menuPanelPositionX);
-        menuPanelTween.Duration(1f).Ease(Easing.Quadratic.Out).OnUpdate(() => {
-            this.MenuPanel.position = new Vector3(this._originalMenuPosition.x - this._menuPanelPositionX, this._originalMenuPosition.y, this._originalMenuPosition.z);
-        });
-        menuPanelTween.To(this.MenuPanelStartOffset).Start();
-
-        this._gameLogoTween.To(0f).Start();
-        this._gameLogoSpring.To(0);
         this._fadeInTween.To(0f).Start();
     }
 }

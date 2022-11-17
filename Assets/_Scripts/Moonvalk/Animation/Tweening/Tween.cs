@@ -23,6 +23,11 @@ namespace Moonvalk.Animation
             // Apply easing and set properties.
             for (int i = 0; i < this._properties.Length; i++)
             {
+                if (this._properties[i] == null)
+                {
+                    this.Stop();
+                    break;
+                }
                 this._properties[i]() = this._easingFunctions[i](this._percentage, this._startValues[i], this._targetValues[i]);
             }
         }

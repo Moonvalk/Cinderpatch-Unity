@@ -10,8 +10,8 @@ public class IntroPlayer : MonoBehaviour
 
     private void Awake()
     {
-        Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
-        Screen.fullScreen = !Screen.fullScreen;
+        // Screen.fullScreenMode = FullScreenMode.MaximizedWindow;
+        // Screen.fullScreen = !Screen.fullScreen;
     }
 
     // Start is called before the first frame update

@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Name: Rare
   PumpkinObject: {fileID: 4375891185651575469, guid: 8b6d5da2b6603ad468cc574098482c42, type: 3}
-  MinSeeds: 1
-  MaxSeeds: 4
+  MinItems: 1
+  MaxItems: 3
   TextureStates:
   - Image: {fileID: 2800000, guid: c3d5fa4dba0888a4cabd2b3b91ea7c7c, type: 3}
     State: 0
   - Image: {fileID: 2800000, guid: e06fe416b9c06dd44a70595e51819e9e, type: 3}
     State: 1
+  LootConfig: {fileID: 11400000, guid: 8ff5887ce3241574b948ba236ebc3382, type: 2}
+  ParticleEffect: {fileID: 4210341919326370211, guid: f134dcb3a14ead24680a28abdb052b68, type: 3}
