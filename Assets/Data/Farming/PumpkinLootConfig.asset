@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b59f69022bf95e9439e0faff3eaa156a, type: 3}
+  m_Name: PumpkinLootConfig
+  m_EditorClassIdentifier: 
+  Items:
+  - {fileID: 6875154822277275418, guid: 23a5825fd85d9774a85a0057e8cc31ed, type: 3}

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using Moonvalk.Animation;
 using Moonvalk.Utilities;
 using Moonvalk;
@@ -15,6 +16,11 @@ namespace Game
         /// Singleton instance of GameManager.
         /// </summary>
         protected static GameManager _instance;
+
+        /// <summary>
+        /// Main audio mixer.
+        /// </summary>
+        public AudioMixer Mixer;
         #endregion
 
         #region Public Getters/Setters
@@ -39,6 +45,9 @@ namespace Game
         {
             this.initialize();
             this.registerSystems();
+
+            this.Mixer.SetFloat("MusicVolume", Mathf.Log10(Global.MusicVolume) * 20f);
+            this.Mixer.SetFloat("SoundVolume", Mathf.Log10(Global.SoundVolume) * 20f);
         }
 
         /// <summary>

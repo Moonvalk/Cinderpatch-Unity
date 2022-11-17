@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9591121427acad84bb0b3f2b6d3c0136, type: 3}
   m_Name: Level1
   m_EditorClassIdentifier: 
-  MinPumpkinSpawns: 15
-  MaxPumpkinSpawns: 20
+  MinPumpkinSpawns: 3
+  MaxPumpkinSpawns: 5
   PumpkinTypes:
   - {fileID: 11400000, guid: 6912d038078cd854a8e9bcb2ac0b6270, type: 2}
   - {fileID: 11400000, guid: 2cc0587ab0fe06f4b8f325d13e586ba7, type: 2}

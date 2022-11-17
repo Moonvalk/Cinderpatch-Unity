@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using Moonvalk.Animation;
 using Moonvalk.Utilities;
 using Moonvalk;
@@ -22,6 +23,7 @@ public class FarmPatch : MonoBehaviour
     protected TweenVec2 _selectedTileMoveTween;
     protected Vector2 _selectedTilePosition;
     protected int _nearestTile;
+    protected MicroTimer _tillingTimer;
 
     private void Awake()
     {
@@ -43,6 +45,11 @@ public class FarmPatch : MonoBehaviour
 
         this._selectedTileMoveTween = new TweenVec2(() => ref this._selectedTilePosition);
         this._selectedTileMoveTween.Duration(0.3f).Ease(Easing.Cubic.Out);
+
+        this._tillingTimer = new MicroTimer(() => {
+            this.tillCurrentTile();
+            PlayerController.Player1.SetTilling(false);
+        });
     }
 
     private void FixedUpdate()
@@ -53,20 +60,44 @@ public class FarmPatch : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (EventSystem.current.IsPointerOverGameObject())
         {
-            if (this._isTileAvailable)
+            return;
+        }
+
+        if (this._isTileAvailable)
+        {
+            if (this.Tiles[this._nearestTile].State == FarmTileState.Tilled)
             {
-                if (this.Tiles[this._nearestTile].State == FarmTileState.Tilled)
+                if (Input.GetMouseButtonDown(0) && PlayerController.SeedCount > 0)
                 {
+                    PlayerController.Player1.RemoveSeed();
                     this._manager.RequestNewSapling(this.Tiles[this._nearestTile]);
                 }
-                else
+            }
+            else if (Input.GetMouseButton(0))
+            {
+                if (!_tillingTimer.IsRunning)
                 {
-                    this.Tiles[this._nearestTile].SetState(FarmTileState.Tilled);
+                    this._tillingTimer.Start(PlayerController.Player1.TillDuration);
+                    PlayerController.Player1.SetTilling(true, this.Tiles[this._nearestTile].transform.position);
                 }
             }
         }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            if (this._tillingTimer.IsRunning)
+            {
+                this._tillingTimer.Stop();
+                PlayerController.Player1.SetTilling(false);
+            }
+        }
+    }
+
+    private void tillCurrentTile()
+    {
+        this.Tiles[this._nearestTile].SetState(FarmTileState.Tilled);
     }
 
     private void OnTriggerEnter(Collider other_)
@@ -124,6 +155,11 @@ public class FarmPatch : MonoBehaviour
             }
             if (isTileOccupied)
             {
+                if (this._tillingTimer.IsRunning)
+                {
+                    this._tillingTimer.Stop();
+                    PlayerController.Player1.SetTilling(false);
+                }
                 return;
             }
 

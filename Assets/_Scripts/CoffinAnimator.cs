@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using Moonvalk.Animation;
 using Moonvalk.Utilities;
 
@@ -20,6 +21,8 @@ public class CoffinAnimator : MonoBehaviour
     protected float _height;
     protected float _rotation;
     protected float _doorRotation;
+
+    public UnityEvent PlayerEnableEvent;
 
     private void Start()
     {
@@ -83,6 +86,7 @@ public class CoffinAnimator : MonoBehaviour
     {
         MicroTimer timer = new MicroTimer(() => {
             this.Player.EnableControl(true);
+            this.PlayerEnableEvent.Invoke();
             Tween pull = new Tween(() => ref this._height);
             pull.To(this.OutHeight).Duration(1.5f).Ease(Easing.Cubic.In).Start().OnComplete(() => {
                 Destroy(this.gameObject);

@@ -57,7 +57,7 @@ public class Pumpkin : MonoBehaviour
                 this._growSpring.To(1f);
                 this.updateScale();
             });
-            growTimer.Start(10f);
+            growTimer.Start(Random.Range(10f, 20f));
         }
     }
 
@@ -70,6 +70,22 @@ public class Pumpkin : MonoBehaviour
     {
         this._tile.SetState(FarmTileState.Untilled);
         this._tile.SetOccupied(false);
+
+        int lootDrops = Random.Range(this.Type.MinItems, this.Type.MaxItems + 1);
+        while (lootDrops > 0) {
+            Vector3 randomVelocity = new Vector3(Random.Range(-8f, 8f), Random.Range(2f, 5f), Random.Range(-8f, 8f));
+            Vector3 randomPosition = new Vector3(Random.Range(-0.3f, 0.3f), Random.Range(0f, 0.3f), Random.Range(-0.3f, 0.3f));
+            int lootItem = Random.Range(0, this.Type.LootConfig.Items.Length);
+            GameObject spawn = Instantiate(this.Type.LootConfig.Items[lootItem], transform.position + randomPosition, Quaternion.Euler(0f, 0f, 0f));
+            Collectable collectable = spawn.GetComponent<Collectable>();
+            if (collectable != null)
+            {
+                collectable.SetVelocity(randomVelocity);
+            }
+            lootDrops--;
+        }
+
+        Instantiate(this.Type.ParticleEffect, transform.position, Quaternion.Euler(0f, 0f, 0f));
         Destroy(this.gameObject);
     }
 

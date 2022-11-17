@@ -14,8 +14,10 @@ public class PumpkinType : ScriptableObject
 {
     public string Name = "???";
     public GameObject PumpkinObject;
-    public int MinSeeds = 1;
-    public int MaxSeeds = 3;
+    public int MinItems = 1;
+    public int MaxItems = 3;
 
     public PumpkinStateTexture[] TextureStates;
+    public LootDropConfig LootConfig;
+    public GameObject ParticleEffect;
 }

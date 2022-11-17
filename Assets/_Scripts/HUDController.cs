@@ -17,6 +17,10 @@ public class HUDController : MonoBehaviour
     protected float _tweenValue;
     protected float _springValue;
 
+    protected bool _isHUDDisplayed = false;
+
+    public PauseMenuController PauseMenu;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -35,6 +39,7 @@ public class HUDController : MonoBehaviour
         this._springValue = 0f;
 
         this.updateHUDElements();
+        this.PauseMenu.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -43,25 +48,33 @@ public class HUDController : MonoBehaviour
         this.updateHUDElements();
     }
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !this.PauseMenu.isActiveAndEnabled)
+        {
+            PlayerController.Player1.EnableControl(false);
+            this.ShowPauseMenu();
+        }
+    }
+
     public void ShowDisplay()
     {
         this._animationTween.To(1f).Start();
         this._animationSpring.To(1f);
     }
 
+    public void ShowPauseMenu()
+    {
+        this.HideDisplay();
+        this.PauseMenu.gameObject.SetActive(true);
+        this.PauseMenu.DisplayMenu(true);
+    }
+
     public void HideDisplay()
     {
         this._animationTween.To(0f).Start();
         this._animationSpring.To(0f);
-    }
-
-    public void ReturnToMenu()
-    {
-        MicroTimer returnTimer = new MicroTimer(() => {
-            Global.Systems.ClearAllSystems();
-            SceneManager.LoadScene("Menu");
-        });
-        returnTimer.Start(6f);
+        this._isHUDDisplayed = false;
     }
 
     protected void updateHUDElements()

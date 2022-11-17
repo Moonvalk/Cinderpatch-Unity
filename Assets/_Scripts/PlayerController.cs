@@ -5,11 +5,14 @@ using Moonvalk.Utilities;
 using Moonvalk.Animation;
 using Moonvalk.Accessory;
 using System.Collections.Generic;
+using UnityEngine.EventSystems;
 using Moonvalk;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
     public static PlayerController Player1;
+    public static int SeedCount;
 
     protected Rigidbody _rigidbody;
     protected Collider _collider;
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
     public float AttackCooldown = 1f;
     protected MicroTimer _attackTimer;
     protected bool _isAttackAvailable = true;
+    protected bool _isTilling = false;
 
     public GameObject Target;
     protected bool _isTargetActive = false;
@@ -63,6 +67,20 @@ public class PlayerController : MonoBehaviour
     protected Tween _targetTween;
     protected float _targetScale = 0f;
     protected float _targetOpacity = 0f;
+
+    public TextMeshProUGUI SeedCounter;
+    public float TillDuration = 2f;
+    public UnityEvent TillingStartEvent;
+    public UnityEvent TillingEndEvent;
+
+    public GameObject TillingEffect;
+    protected GameObject _tillingParticles;
+
+    public UnityEvent MoveTutorialEvent;
+    public UnityEvent JumpTutorialEvent;
+    public UnityEvent AttackTutorialEvent;
+    public UnityEvent TillTutorialEvent;
+    public UnityEvent PlantTutorialEvent;
 
     public float CurrentMoveSpeed
     {
@@ -88,8 +106,9 @@ public class PlayerController : MonoBehaviour
         this._currentMovementSpeed = new Vector3();
         this._frontFaceDirection = new Vector3();
         
-        // Global.GetGameManager().AssignPlayer(this);
         PlayerController.Player1 = this;
+        PlayerController.SeedCount = 0;
+        this.updateSeedDisplay();
     }
 
     private void Start()
@@ -131,10 +150,16 @@ public class PlayerController : MonoBehaviour
         this.handleJumpInput();
         this.handleMoveInput();
 
-        if (Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1) && !this._isTilling)
         {
             this._isAiming = true;
             this.Animator.ChangeSet("Melee");
+
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                return;
+            }
+
             if (Input.GetMouseButtonDown(0) && this._isAttackAvailable)
             {
                 this.Animator.Play("Attack");
@@ -161,17 +186,22 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        this.handleMovement();
+        this.handleFriction();
+        if (!this._isTilling)
+        {
+            this.handleMovement();
+        }
+
         this.handleGroundedCheck();
         if (this._jumping)
         {
             this._rigidbody.AddForce(Vector3.up * this.JumpHoldForce);
         }
         this.handleSpring();
+        this.adjustPlayerOrientation();
 
         if (this._enabled)
         {
-            this.adjustPlayerOrientation();
             this.handleTargeting();
             this.animate();
         }
@@ -233,6 +263,11 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
+        if (this._isTilling)
+        {
+            this.Animator.Play("Tilling");
+            return;
+        }
         if (!this._grounded)
         {
             this.Animator.Play("Jump");
@@ -277,6 +312,18 @@ public class PlayerController : MonoBehaviour
             }
         }
         this._grounded = false;
+    }
+
+    public void AddSeed()
+    {
+        PlayerController.SeedCount++;
+        this.updateSeedDisplay();
+    }
+
+    public void RemoveSeed()
+    {
+        PlayerController.SeedCount--;
+        this.updateSeedDisplay();
     }
 
     private void handleSpring()
@@ -331,7 +378,7 @@ public class PlayerController : MonoBehaviour
         {
             this._jumping = false;
         }
-        else if (Input.GetKey(KeyCode.Space) && this._grounded && !this._jumping && this._canJump)
+        else if (Input.GetKeyDown(KeyCode.Space) && this._grounded && !this._jumping && this._canJump)
         {
             this._jumping = true;
             this._canJump = false;
@@ -362,11 +409,14 @@ public class PlayerController : MonoBehaviour
         this._frontFaceDirection.y = transform.position.y;
     }
 
-    private void handleMovement()
+    private void handleFriction()
     {
         Vector3 friction = new Vector3(-this._rigidbody.velocity.x * this.Friction, 0f, -this._rigidbody.velocity.z * this.Friction);
         this._rigidbody.AddForce(friction);
+    }
 
+    private void handleMovement()
+    {
         this.handleAxisMovement(this._moveHorizontal, ref this._currentMovementSpeed.x);
         this.handleAxisMovement(this._moveVertical, ref this._currentMovementSpeed.z);
 
@@ -413,11 +463,49 @@ public class PlayerController : MonoBehaviour
         else
         {
             this.OnDisableEvent.Invoke();
+            this._moveHorizontal = 0;
+            this._moveVertical = 0;
+            this.Animator.Play("Idle");
         }
     }
 
     public void Hide(bool isVisible_)
     {
         this.PlayerSprite.gameObject.SetActive(!isVisible_);
+    }
+
+    private void updateSeedDisplay()
+    {
+        string display = "";
+        int stringLength = 3 - PlayerController.SeedCount.ToString().Length;
+        while(stringLength > 0)
+        {
+            stringLength--;
+            display += "0";
+        }
+        display += PlayerController.SeedCount;
+        this.SeedCounter.text = display;
+    }
+
+    public void SetTilling(bool flag_)
+    {
+        this.SetTilling(flag_, this.PlayerSprite.position);
+    }
+
+    public void SetTilling(bool flag_, Vector3 position_)
+    {
+        this._isTilling = flag_;
+        this._moveHorizontal = 0;
+        this._moveVertical = 0;
+
+        if (this._isTilling)
+        {
+            this._tillingParticles = Instantiate(this.TillingEffect, position_, Quaternion.Euler(0f, 0f, 0f));
+            this.TillingStartEvent.Invoke();
+        }
+        else
+        {
+            this.TillingEndEvent.Invoke();
+        }
     }
 }
